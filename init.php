@@ -19,7 +19,7 @@ class Estimate_Reading_Time extends Plugin {
 
     $wpm = 180; // arbitrary value, based on adult averages
     $word_count = str_word_count($article["content"]);
-    $minutes = $word_count / $wpm;
+    $minutes = round($word_count / $wpm);
 
     $minimum_time_bucket = 5; // minutes
     $time_label = $this->minutes_to_time_label($word_count, $minimum_time_bucket);
