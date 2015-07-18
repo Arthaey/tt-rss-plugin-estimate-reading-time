@@ -54,13 +54,13 @@ class Estimate_Reading_Time extends Plugin {
         if (($lowerBound <= 60 && $upperBound <= 60) || ($lowerBound > 60 && $upperBound > 60)) {
           $lowerOptions["no_units"] = true;
         }
-        return minutes_to_time_str($lowerBound, $lowerOptions) + "-" + minutes_to_time_str($upperBound);
+        return $this->minutes_to_time_str($lowerBound, $lowerOptions) + "-" + $this->minutes_to_time_str($upperBound);
       }
     }
 
     // If we get to here, then the time is longer than our largest explicit bucket.
     // Divide everything beyond into hour-long buckets.
-    return minutes_to_time_str($minutes, array("treat_60_min_as_an_hour" => true));
+    return $this->minutes_to_time_str($minutes, array("treat_60_min_as_an_hour" => true));
   }
 
   function minutes_to_time_str($minutes, $options = array()) {
