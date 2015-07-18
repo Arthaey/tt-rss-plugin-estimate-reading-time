@@ -45,7 +45,7 @@ class Estimate_Reading_Time extends Plugin {
 
     for ($i = 0; $i < count($buckets) - 1; $i++) {
       $lowerBound = $buckets[$i] * $minimum_time_bucket;
-      $upperBound = $buckets[i+1] * $minimum_time_bucket;
+      $upperBound = $buckets[$i+1] * $minimum_time_bucket;
 
       if ($lowerBound <= $minutes && $minutes < $upperBound) {
         $lowerOptions = array();
