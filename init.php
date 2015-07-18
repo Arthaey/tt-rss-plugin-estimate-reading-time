@@ -14,6 +14,30 @@ class Estimate_Reading_Time extends Plugin {
     $host->add_hook($host::HOOK_ARTICLE_FILTER, $this);
   }
 
+  function hook_article_filter($article) {
+    // TODO: replace echo with _debug // XXX
+
+    $wpm = 180; // arbitrary value, based on adult averages
+    $word_count = str_word_count($article["content"]);
+    $minutes = $word_count / $wpm;
+
+    $minimum_time_bucket = 5; // minutes
+    $time_label = $this->minutes_to_time_label($word_count, $minimum_time_bucket);
+    echo("estimated reading time: $minutes min ($time_label), based on $word_count words at $wpm WPM");
+
+    $owner_uid = $article["owner_uid"];
+    if (!label_find_id($time_label, $owner_uid)) {
+      label_create($time_label);
+    }
+    label_add_article($article["ref_id"], $time_label, $owner_uid);
+
+    return $article;
+  }
+
+  function api_version() {
+    return 2;
+  }
+
   function minutes_to_time_label($minutes, $minimum_time_bucket) {
     // Buckets: <5, 5-10, 10-15, 15-30, 30-60, then 1-hour increments,
     // for the default 5-minute minimum bucket size.
@@ -49,30 +73,6 @@ class Estimate_Reading_Time extends Plugin {
     }
 
     return $amount + ($options["no_units"] ? "" : " $units");
-  }
-
-  function hook_article_filter($article) {
-    // TODO: replace echo with _debug // XXX
-
-    $wpm = 180; // arbitrary value, based on adult averages
-    $word_count = str_word_count($article["content"]);
-    $minutes = $word_count / $wpm;
-
-    $minimum_time_bucket = 5; // minutes
-    $time_label = $this->minutes_to_time_label($word_count, $minimum_time_bucket);
-    echo("estimated reading time: $minutes min ($time_label), based on $word_count words at $wpm WPM");
-
-    $owner_uid = $article["owner_uid"];
-    if (!label_find_id($time_label, $owner_uid)) {
-      label_create($time_label);
-    }
-    label_add_article($article["ref_id"], $time_label, $owner_uid);
-
-    return $article;
-  }
-
-  function api_version() {
-    return 2;
   }
 }
 ?>
