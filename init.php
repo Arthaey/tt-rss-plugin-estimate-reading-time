@@ -59,7 +59,7 @@ class Estimate_Reading_Time extends Plugin {
     $minutes = $word_count / $wpm;
 
     $minimum_time_bucket = 5; // minutes
-    $time_label = minutes_to_time_label($word_count, $minimum_time_bucket);
+    $time_label = $this->minutes_to_time_label($word_count, $minimum_time_bucket);
     echo("estimated reading time: $minutes min ($time_label), based on $word_count words at $wpm WPM");
 
     $owner_uid = $article["owner_uid"];
