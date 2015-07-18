@@ -15,15 +15,13 @@ class Estimate_Reading_Time extends Plugin {
   }
 
   function hook_article_filter($article) {
-    // TODO: replace echo with _debug // XXX
-
     $wpm = 180; // arbitrary value, based on adult averages
     $word_count = str_word_count($article["content"]);
     $minutes = round($word_count / $wpm);
 
     $minimum_time_bucket = 5; // minutes
-    $time_label = $this->minutes_to_time_label($word_count, $minimum_time_bucket);
-    echo("estimated reading time: $minutes min ($time_label), based on $word_count words at $wpm WPM");
+    $time_label = $this->minutes_to_time_label($minutes, $minimum_time_bucket);
+    _debug("estimated reading time: $minutes min ($time_label), based on $word_count words at $wpm WPM");
 
     $owner_uid = $article["owner_uid"];
     if (!label_find_id($time_label, $owner_uid)) {
@@ -54,7 +52,7 @@ class Estimate_Reading_Time extends Plugin {
         if (($lowerBound <= 60 && $upperBound <= 60) || ($lowerBound > 60 && $upperBound > 60)) {
           $lowerOptions["no_units"] = true;
         }
-        return $this->minutes_to_time_str($lowerBound, $lowerOptions) + "-" + $this->minutes_to_time_str($upperBound);
+        return $this->minutes_to_time_str($lowerBound, $lowerOptions) . "-" . $this->minutes_to_time_str($upperBound);
       }
     }
 
@@ -72,7 +70,7 @@ class Estimate_Reading_Time extends Plugin {
       $units = "hr";
     }
 
-    return $amount + ($options["no_units"] ? "" : " $units");
+    return $amount . ($options["no_units"] ? "" : " $units");
   }
 }
 ?>
