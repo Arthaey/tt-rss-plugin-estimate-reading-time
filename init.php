@@ -27,7 +27,12 @@ class Estimate_Reading_Time extends Plugin {
     if (!label_find_id($time_label, $owner_uid)) {
       label_create($time_label);
     }
-    label_add_article($article["ref_id"], $time_label, $owner_uid);
+    $guid = $article["guid"];
+    $result = db_query("SELECT id FROM ttrss_entries WHERE guid = '$guid'");
+    if (db_num_rows($result) != 0) {
+      $ref_id = db_fetch_result($result, 0, "id");
+      label_add_article($ref_id, $time_label, $owner_uid);
+    }
 
     return $article;
   }
